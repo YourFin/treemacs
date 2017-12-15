@@ -29,6 +29,7 @@
 (require 'treemacs-branch-creation)
 (require 'treemacs-follow-mode)
 (require 'treemacs-tag-follow-mode)
+(require 'treemacs-visuals)
 (require 'treemacs-customization)
 (eval-and-compile
   (require 'cl-lib)
@@ -449,8 +450,12 @@ generated."
 (defun treemacs-yank-path-at-point ()
   "Copy the absolute path of the node at point."
   (interactive)
-  (-when-let (yank (-some-> (treemacs--prop-at-point 'abs-path) (f-full) (kill-new)))
-    (treemacs--log "Yanked path: %s" (propertize yank 'face 'font-lock-string-face))))
+  (-if-let- [yank (-some-> (treemacs--prop-at-point 'abs-path) (f-full) (kill-new))]
+      (progn
+        (treemacs-pulse-on-success)
+        (treemacs--log "Yanked path: %s" (propertize yank 'face 'font-lock-string-face)))
+    (treemacs-pulse-on-error)
+    (treemacs--log "There is nothing to copy here.")))
 
 (defun treemacs-yank-root ()
   "Copy the absolute path of the current treemacs root."

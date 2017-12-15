@@ -99,6 +99,17 @@ if the node is 'foo/bar/baz', the face is used for 'foo/bar/'."
   "Face for column headers of the helpful hydra."
   :group 'treemacs-faces)
 
+(defface treemacs-error-pulse-face
+  '((t :foreground "#111111" :background "#ab3737"))
+  "Pulse face used when an error occurs or an action fails."
+  :group 'treemacs-faces)
+
+(defface treemacs-success-pulse-face
+  '((t :foreground "#111111" :background "#669966"))
+  "Pulse face used to signal a successful action."
+  :group 'treemacs-faces)
+
+
 (provide 'treemacs-faces)
 
 ;;; treemacs-faces.el ends here

@@ -21,6 +21,7 @@
 ;;; Code:
 
 (require 'image)
+(require 'pulse)
 (require 'hl-line)
 (require 'treemacs-impl)
 (require 'treemacs-customization)
@@ -247,6 +248,40 @@ be assigned which treemacs icon, for exmaple
                  (icon (cdr (assq mode mode-icon-alist))))
       (treemacs--log "Map %s to %s" extension (symbol-name icon))
       (puthash (substring extension 1) (symbol-value icon) treemacs-icons-hash))))
+
+(defun treemacs--pulse-png-advice (&rest _)
+  "__TODO__."
+  (when (eq 'treemacs-mode major-mode)
+    (treemacs--with-writable-buffer
+     (-let*- [(btn (treemacs-current-button))
+              (start (- (button-start btn) 2) )
+              (end (1+ start))
+              (img (get-text-property start 'display))
+              (cp (copy-sequence img))]
+       (treemacs--set-img-property cp :background
+                                   (face-attribute
+                                    (overlay-get pulse-momentary-overlay 'face)
+                                    :background nil t))
+       (put-text-property start end 'display cp)))))
+
+(defun treemacs--do-pulse (face)
+  "Visually pulse current line using FACE."
+  (pulse-momentary-highlight-one-line (point) face)
+  (advice-add 'pulse-momentary-unhighlight :after #'hl-line-highlight)
+  (advice-add 'pulse-lighten-highlight :after #'treemacs--pulse-png-advice))
+
+(defsubst treemacs-pulse-on-success ()
+  "Pulse current line with `treemacs-success-pulse-face'."
+  (when treemacs-pulse-on-success
+    (treemacs--do-pulse 'treemacs-success-pulse-face)))
+
+(defsubst treemacs-pulse-on-error ()
+  "Pulse current line with `treemacs-error-pulse-face'."
+  (when treemacs-pulse-on-error
+    (treemacs--do-pulse 'treemacs-error-pulse-face)))
+
+(global-set-key (kbd "C-x M-ü") #'treemacs-pulse-on-success)
+(global-set-key (kbd "C-x M-ä") #'treemacs-pulse-on-error)
 
 (provide 'treemacs-visuals)
 

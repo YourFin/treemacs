@@ -378,6 +378,19 @@ button's position will be wrong, even if it wasn't deleted outright):
   :type 'hook
   :group 'treemacs-configuration)
 
+(defcustom treemacs-pulse-on-error t
+  "When non-nil treemacs will pulse the current line as success indicator.
+This applies to actions like `treemacs-yank-path-at-point'."
+  :type 'boolean
+  :group 'treemacs-configuration)
+
+(defcustom treemacs-pulse-on-success t
+  "When non-nil treemacs will pulse the current line as failure indicator.
+This applies to actions like treemacs not finding any tags it can show when
+`treemacs-push-button' is called on a file node."
+  :type 'boolean
+  :group 'treemacs-configuration)
+
 (provide 'treemacs-customization)
 
 ;;; treemacs-customization.el ends here

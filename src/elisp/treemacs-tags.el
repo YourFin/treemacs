@@ -30,6 +30,7 @@
 (require 'treemacs-branch-creation)
 (require 'treemacs-customization)
 (require 'treemacs-faces)
+(require 'treemacs-visuals)
 (eval-and-compile
   (require 'cl-lib)
   (require 'treemacs-macros))
@@ -221,6 +222,7 @@ during a reopen process. Recursively open all tag below BTN when RECURSIVE is t.
                                  (when (eq 'tag-node-closed (button-get it 'state))
                                    (goto-char (button-start it))
                                    (treemacs--open-tag-node it :recursive t))))))
+      (treemacs-pulse-on-error)
       (treemacs--log "No tags found for %s" (propertize path 'face 'font-lock-string-face)))))
 
 (defun treemacs--close-tags-for-file (btn &optional recursive)
