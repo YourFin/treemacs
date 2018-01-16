@@ -7,7 +7,8 @@ compile:
 	-f batch-byte-compile ./src/elisp/*.el
 
 test:
-	cask exec ert-runner --verbose --reporter ert
+	cask exec ert-runner --verbose --win --reporter ert; \
+	cask exec ert-runner --verbose --no-win --reporter ert \
 
 clean:
 	rm -f ./src/elisp/*.elc
